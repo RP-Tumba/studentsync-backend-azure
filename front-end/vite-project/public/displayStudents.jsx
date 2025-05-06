@@ -1,12 +1,22 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getAllStudents } from "../API/index"
 export default function DisplayStudents() {
-
-  const getStudents = async () => {
-    const { data } = await getAllStudents();
-    console.log(data)
-  }
-  getStudents()
+  const [fetched,setfetched] =  useState([]);
+  useEffect(() => {
+    const getStudents = async () => {
+      try {
+       const  { data }  =  await getAllStudents();
+       console.log(data.data)
+      } catch (e) {
+       console.log("no found");
+      }
+      
+    }  
+   getStudents() 
+    
+  })
+  
+  
   return (
     <>
       <table>
