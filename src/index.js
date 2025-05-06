@@ -19,6 +19,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Welcome to Kepler Capstone Backend!");
 });
+// app.put('/:id',(req,res)=>{
+//   res.send("students is updated")
+// });
 
 // api routes
 app.use("/api/v1", routes);
