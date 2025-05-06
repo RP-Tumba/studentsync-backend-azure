@@ -17,7 +17,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Kepler Capstone Backend!");
+  res.send("Welcome to Azure project!");
 });
 
 // api routes
