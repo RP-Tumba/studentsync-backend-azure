@@ -43,7 +43,7 @@ export const updateStudentById = async (req, res) => {
     const check = await pool.query(
       `SELECT * FROM students 
        WHERE (student_id = $1 OR email = $2 OR contact_number = $3)
-         AND id != $4`,
+         AND id = $4`,
       [student_id, email, contact_number, id]
     );
 
