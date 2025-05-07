@@ -17,7 +17,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Kepler Capstone Backend!");
+  res.send("Welcome to Azure project!");
 });
 // app.put('/:id',(req,res)=>{
 //   res.send("students is updated")
