@@ -33,20 +33,58 @@ export const getAllStudents = async (req, res) => {
 };
 
 
-export const insertStudent = async (req,res)=>{
-  try{
-    const putData = await pool.query("insert into students values(3,'Noellaa','Uwajeneza','S1221112','noella@gmail.com','2002-12-31T22:01:00.000Z','0792435990','2022-12-31T22:00:00.000Z','words.jpg','2025-06-06T12:40:38.436Z','2025-05-06T12:40:38.436Z')")
-    res.status(200).json({
-      success: true,
-      count: students.rows.length,
-      data: students.rows,
-    });
-  } catch (err) {
-    logger.error(err.message);
-    res.status(500).json({
-      success: false,
-      message: `An unexpected error occurred in GET/STUDENTS, ${err?.message}`,
-    });
+
+
+export const insertingstudent=async(req,res)=>{
+  const id=req.params.id
+  const{
+    first_name,
+    last_name,
+    student_id,
+    email,
+    date_of_birth,
+    contact_number,
+    enrollment_date,
+    profile_picture,
+  }=req.body
+
+
+
+  try {
+
+const selectquery=await pool.query(
+  `SELECT * FROM students WHERE(student_id=$1 OR contact_number=$2 OR email=$3 )AND id=$4`,[student_id,email,contact_number,id]
+)
+
+if(selectquery.rows.length>0){
+  return res.status(409).json({message:"Email,contact number, student-id are allready exist"})
+}
+
+
+   const data = await pool.query(
+      `INSERT INTO students (first_name, last_name, student_id, email, date_of_birth, contact_number, enrollment_date,profile_picture)
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[   first_name,
+        last_name,
+        student_id,
+        email,
+        date_of_birth,
+        contact_number,
+        enrollment_date,
+        profile_picture
+      ]
+    )
+
+    if(data.rows.length>0){
+      res.status(409).json({message:"student not "})
+    } else{
+      res.status(201).json({message:"Students are inserted well",students:data.rows[0]})
+    }
+
+
+  
+  } catch (error) {
+    console.error(error.message)
+    res.status(500).json({message:error.message})
   }
 }
 
