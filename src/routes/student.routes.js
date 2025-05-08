@@ -6,13 +6,19 @@
  */
 import express from "express";
 
-import { getAllStudents, deleteStudent, updateStudentById,insertingstudent  } from "../controllers/student.controller.js";
+
+import { getAllStudents,deleteStudent,insertingstudent,updatestudents,selectingstudentbyid,deletingbyid} from "../controllers/student.controller.js";
 
 const router = express.Router();
 
 router.get("/", getAllStudents);
 router.post('/',insertingstudent);
-router.put('/:id',updateStudentById);
+
+
+router.delete('/:id',deletingbyid);
+router.get('/:id',selectingstudentbyid);
+router.put('/:id',updatestudents)
+
 router.delete("/:id", deleteStudent);
 
 export default router;
