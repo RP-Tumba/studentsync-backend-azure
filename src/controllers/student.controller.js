@@ -7,14 +7,6 @@
 import pool from "../config/db.js";
 import { logger } from "../utils/index.js";
 
-import { Client } from "pg";
-import express from "express";
-const stdInfo = express();
-stdInfo.use(express.json())
-
-
-
-
 export const getAllStudents = async (req, res) => {
   try {
     const students = await pool.query("SELECT * FROM students");
@@ -31,7 +23,6 @@ export const getAllStudents = async (req, res) => {
     });
   }
 };
-
 
 
 
@@ -87,5 +78,7 @@ if(selectquery.rows.length>0){
     res.status(500).json({message:error.message})
   }
 }
+
+
 
 
