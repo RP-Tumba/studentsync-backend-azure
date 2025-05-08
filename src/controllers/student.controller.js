@@ -24,6 +24,24 @@ export const getAllStudents = async (req, res) => {
   }
 };
 
+export const selectingSpecific = async (req, res) => {
+  const {id} = req.params;
+    try {
+    const student = await pool.query("SELECT * FROM students where id=$1",[id]);
+    res.status(200).json({
+      success: true,
+      count: student.rows.length,
+      data: student.rows,
+    });
+  } catch (err) {
+    logger.error(err.message);
+    res.status(500).json({
+      success: false,
+      message: `An unexpected error occurred in GET/STUDENTS, ${err?.message}`,
+    });
+  }
+};
+
 
 
 export const insertingstudents=async(req,res)=>{
@@ -228,10 +246,6 @@ if(selectquery.rows.length>0){
     res.status(500).json({message:error.message})
   }
 }
-
-
-
-
 
 
 export const deleteStudent = async (req, res) => {
