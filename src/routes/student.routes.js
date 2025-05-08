@@ -9,7 +9,7 @@ import { getAllStudents,selectingSpecific } from "../controllers/student.control
 
 const router = express.Router();
 
-router.get("/", getAllStudents);
+router.get("/", getAllStudents);  
 router.get("/:id", selectingSpecific);
 
 export default router;
