@@ -22,6 +22,8 @@ export default function DisplayStudents() {
 
 
     }
+git
+   
     getStudents()
   }, [])
   function handleSearch(e) {
