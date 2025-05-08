@@ -12,5 +12,6 @@ import { requestLogger } from "../middlewares/index.js";
 const router = express.Router();
 
 router.use("/students", requestLogger, studentRoutes);
+router.use("/students/:id",requestLogger,studentRoutes);
 
 export default router;
