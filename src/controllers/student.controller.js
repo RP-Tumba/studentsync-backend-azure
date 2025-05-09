@@ -270,3 +270,33 @@ export const deleteStudent = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+export const selectingStudentByFirstName = async (req, res) => {
+  const { first_name } = req.params;
+
+  try {
+    const response = await pool.query(
+       `SELECT * FROM students WHERE LOWER(first_name) LIKE LOWER($1)`,
+      [`%${first_name}%`]
+    );
+
+    if (response.rows.length === 0) {
+      return res.status(404).json({ message: "No students found with that first name" });
+    }
+
+    return res.status(200).json({
+      message: "Student(s) found",
+      students: response.rows
+    });
+  } catch (error) {
+    console.error("Error fetching student by first name:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+

@@ -25,6 +25,7 @@ app.get("/", (req, res) => {
 
 // api routes
 app.use("/api/v1", routes);
+app.use('/api/v1/students', routes);
 
 // Middleware to handle 404 errors
 app.use((req, res, next) => {
