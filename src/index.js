@@ -19,9 +19,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Welcome to Azure project!");
 });
-// app.put('/:id',(req,res)=>{
-//   res.send("students is updated")
-// });
+
 
 // api routes
 app.use("/api/v1", routes);

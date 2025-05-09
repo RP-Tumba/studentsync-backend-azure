@@ -24,7 +24,7 @@ export const getAllStudents = async (req, res) => {
   }
 };
 
-export const selectingSpecific = async (req, res) => {
+export const selectStudentById = async (req, res) => {
   const {id} = req.params;
     try {
     const student = await pool.query("SELECT * FROM students where id=$1",[id]);
@@ -44,7 +44,7 @@ export const selectingSpecific = async (req, res) => {
 
 
 
-export const insertingstudents=async(req,res)=>{
+export const insertStudent=async(req,res)=>{
   const id=req.params.id
   const{
     first_name,
@@ -97,7 +97,7 @@ if(selectquery.rows.length>0){
   }
 }
 
-export const deletingbyid=async(req,res)=>{
+export const deleteStudentById=async(req,res)=>{
   const id=req.params.id
   try {
    const checkdelete=await pool.query(
@@ -119,26 +119,8 @@ export const deletingbyid=async(req,res)=>{
   }
 }
 
-
-export const selectingstudentbyid=async(req,res)=>{
-  const id=req.params.id
-  try {
-    const response=await pool.query(
-      `SELECT * FROM students WHERE id=$1`,[id]
-    )
-    if(response.rows.length===0){
-      return res.status(408).json({message:"Students are not available in database"})
-    }
-    return res.status(200).json({message:"Student Selected",Student:response.rows[0]})
-  } catch (error) {
-    console.error("student not fetched")
-    res.status(500).json({message:"INternal srever error"})
-  }
-}
-
-export const updatestudents=async(req,res)=>{
-  const {id}=req.params.id
-  
+export const updateStudent = async (req, res) => {
+  const { id } = req.params;
   const {
     first_name,
     last_name,
@@ -148,28 +130,31 @@ export const updatestudents=async(req,res)=>{
     contact_number,
     enrollment_date,
     profile_picture,
-  }=req.body
+  } = req.body;
   try {
-    const checkingstudentavailable=await pool.query(
-      `SELECT * FROM students WHERE(student-id=$1 OR email=$2 OR contact-number=$3) AND id=$4`,[student_id,email,contact_number,id]
-    )
-    if(checkingstudentavailable.rows.length>0){
-      return res.status(409).json({message:"students allready exist "})
+    const check = await pool.query(
+      `SELECT * FROM students 
+       WHERE (student_id = $1 OR email = $2 OR contact_number = $3)
+         AND id = $4`,
+      [student_id, email, contact_number, id]
+    );
+    if (check.rows.length > 0) {
+      return res.status(409).json({ message: 'Student ID, Email or Contact Number already exists.' });
     }
-    const result=await pool.query(
-      `UPDATE students SET
-          first_name=$1
-    last_name=$2
-    student_id=$3
-    email=$4
-    date_of_birth=$5
-    contact_number=$6
-    enrollment_date=$7
-    profile_picture=8
-    WHERE id=$9
-    RETURNING *
-      `
-      [  
+    const result = await pool.query(
+      `UPDATE students 
+       SET  
+         first_name = $1,
+         last_name = $2,
+         student_id = $3,
+         email = $4,
+         date_of_birth = $5,
+         contact_number = $6,
+         enrollment_date = $7,
+         profile_picture = $8
+       WHERE id = $9
+       RETURNING *`,
+      [
         first_name,
         last_name,
         student_id,
@@ -178,74 +163,20 @@ export const updatestudents=async(req,res)=>{
         contact_number,
         enrollment_date,
         profile_picture,
-        id
+        id,
       ]
-    )
-if(result.rows.length===0){
-  return res.status(509).json({message:"Students not found"})
-}
-res.status(200).json({message:"students updated succesfully",student:result.rows[0]})
-
-    
-  } catch (error) {
-    console.error("data error")
-    res.status(500).json({message:"internal server error"})
-  }
-}
-
-
-export const insertingstudent=async(req,res)=>{
-  const id=req.params.id
-  const{
-    first_name,
-    last_name,
-    student_id,
-    email,
-    date_of_birth,
-    contact_number,
-    enrollment_date,
-    profile_picture,
-  }=req.body
-
-
-
-  try {
-
-const selectquery=await pool.query(
-  `SELECT * FROM students WHERE(student_id=$1 OR contact_number=$2 OR email=$3 )AND id=$4`,[student_id,email,contact_number,id]
-)
-
-if(selectquery.rows.length>0){
-  return res.status(409).json({message:"Email,contact number, student-id are allready exist"})
-}
-
-
-   const data = await pool.query(
-      `INSERT INTO students (first_name, last_name, student_id, email, date_of_birth, contact_number, enrollment_date,profile_picture)
-      VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,[   first_name,
-        last_name,
-        student_id,
-        email,
-        date_of_birth,
-        contact_number,
-        enrollment_date,
-        profile_picture
-      ]
-    )
-
-    if(data.rows.length>0){
-      res.status(409).json({message:"student not "})
-    } else{
-      res.status(201).json({message:"Students are inserted well",students:data.rows[0]})
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Student not found' });
     }
-
-
-  
+    res.json({ message: 'Student updated successfully', student: result.rows[0] });
   } catch (error) {
-    console.error(error.message)
-    res.status(500).json({message:error.message})
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+
 
 
 export const deleteStudent = async (req, res) => {
@@ -275,7 +206,7 @@ export const deleteStudent = async (req, res) => {
 
 
 
-export const selectingStudentByFirstName = async (req, res) => {
+export const searchStudentByName = async (req, res) => {
   const { first_name } = req.params;
 
   try {
