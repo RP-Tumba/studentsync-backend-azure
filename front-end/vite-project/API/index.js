@@ -5,3 +5,4 @@ const API = axios.create({
 })
 
 export const getAllStudents = () => API.get('/')
+// export const updateStudentById=()=>API.put('/')
