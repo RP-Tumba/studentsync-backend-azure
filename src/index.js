@@ -17,11 +17,13 @@ app.use(helmet());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Kepler Capstone Backend!");
+  res.send("Welcome to Azure project!");
 });
+
 
 // api routes
 app.use("/api/v1", routes);
+app.use('/api/v1/students', routes);
 
 // Middleware to handle 404 errors
 app.use((req, res, next) => {
